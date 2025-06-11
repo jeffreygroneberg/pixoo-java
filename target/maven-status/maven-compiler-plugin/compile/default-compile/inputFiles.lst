@@ -1,0 +1,12 @@
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/configurations/PixooConfiguration.java
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/configurations/SimulatorConfiguration.java
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/constants/Font.java
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/constants/Palette.java
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/demo/PixooDemo.java
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/enums/Channel.java
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/enums/ImageResampleMode.java
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/enums/TextScrollDirection.java
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/examples/PixooExample.java
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/objects/Pixoo.java
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/objects/PixooNew.java
+/Users/jeffreygroneberg/GitRepos/pixoo-java/src/main/java/com/pixoo/utilities/MathUtils.java
