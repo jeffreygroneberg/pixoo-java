@@ -35,6 +35,6 @@ replay_pid*
 python/
 
 # Compiled class files
-target/
+target
 
 /src/main/resources/config.properties
