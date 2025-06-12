@@ -1,0 +1,40 @@
+# Created by GitHub Copilot
+
+# Standard Java/Maven ignores
+**/target/
+*.log
+*.jar
+*.war
+*.ear
+
+# IDE specific files
+.project
+.classpath
+.settings/
+*.iml
+.idea/
+*.nbproject/
+nbproject/private/
+
+# Build artifacts
+build/
+nbbuild/
+dist/
+nbdist/
+
+# Compressed files
+*.zip
+*.tar.gz
+*.rar
+
+# JVM crash logs
+hs_err_pid*
+replay_pid*
+
+# User-specific ignores
+python/
+
+# Compiled class files
+target/
+
+/src/main/resources/config.properties

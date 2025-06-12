@@ -1,291 +1,101 @@
-# Pixoo Java Library
+# Pixoo-Java
 
-A Java library for communicating with Divoom Pixoo devices (Pixoo 16, 32, and 64).
+This is a Java library for interacting with Pixoo devices. It allows you to send images, animations, and display various information on your Pixoo device.
 
-This is a port of the original Python Pixoo library, providing the same functionality for Java applications.
+This project is a Java port and extension of the original Python library available at [https://github.com/SomethingWithComputers/pixoo](https://github.com/SomethingWithComputers/pixoo).
 
 ## Features
 
-- **Drawing Operations**: Draw pixels, lines, rectangles, text, and images
-- **Device Control**: Control brightness, channels, clocks, and other device settings
-- **Text Rendering**: Built-in PICO-8 style font with support for multiple character sets
-- **Image Support**: Load and display images with automatic scaling
-- **Animation Support**: Create smooth animations by updating the display buffer
-- **Device Management**: Control device settings like brightness, channels, and more
+*   Send static images to the Pixoo device.
+*   Play animated GIFs on the Pixoo device.
+*   Configure device settings like brightness.
+*   Support for both direct device communication and a simulator.
 
-## Installation
+## Getting Started
 
-### Maven
+### Prerequisites
 
-Add the following dependency to your `pom.xml`:
+*   Java Development Kit (JDK) 8 or higher.
+*   Maven for building the project.
+*   A Pixoo device (optional, a simulator is available).
 
-```xml
-<dependency>
-    <groupId>com.pixoo</groupId>
-    <artifactId>pixoo-java</artifactId>
-    <version>1.0.0</version>
-</dependency>
+### Configuration
+
+1.  **Network Configuration**:
+    The application requires the IP address and port of your Pixoo device. This is configured in the `src/main/resources/config.properties` file.
+
+    You'll need to create this file if it doesn't exist, or modify the existing one. You can copy `src/main/resources/config.properties.example` to `src/main/resources/config.properties` to get started.
+
+    Modify the `config.properties` file with the following content, replacing the example IP with your device's actual IP address and port:
+    ```properties
+    # Example configuration:
+    ip.address=192.168.1.123:80
+    ```
+    Replace `192.168.1.123:80` with the actual IP address and port of your Pixoo device. If you are unsure, you might find this information in your router's DHCP client list or by using a network scanning tool.
+
+2.  **Assets**:
+    Place any local GIF files you want to display in the `assets/` directory in the root of the project. The `SimpleTest.java` demo uses `assets/test_2.gif` by default.
+
+### Building the Project
+
+You can build the project using Maven:
+
+```bash
+mvn clean install
 ```
 
-### Build from Source
+This will compile the source code, run tests, and create a JAR file in the `target/` directory.
 
-1. Clone this repository
-2. Navigate to the `java` directory
-3. Run `mvn clean install`
+### Running the Demo
 
-## Quick Start
+The `SimpleTest.java` class provides a simple demonstration of how to send an animated GIF to your Pixoo device.
+
+1.  **Ensure Configuration**: Make sure you have configured the `config.properties` file as described above.
+2.  **Run from IDE**: You can run the `main` method in `de.jeffreygroneberg.pixooj.demo.SimpleTest` directly from your IDE.
+3.  **Run from Command Line (after building)**:
+    Navigate to the project's root directory and execute the following command:
+
+    ```bash
+    mvn exec:java -Dexec.mainClass="de.jeffreygroneberg.pixooj.demo.SimpleTest"
+    ```
+    Or, if you have built the JAR:
+    ```bash
+    java -cp target/pixooj-1.0.0.jar de.jeffreygroneberg.pixooj.demo.SimpleTest
+    ```
+    (Replace `pixooj-1.0.0.jar` with the actual name of the generated JAR file if it differs).
+
+    You should see output in your console indicating the attempt to send the animation, and the GIF should play on your Pixoo device.
+
+## How it Works
+
+The `Pixoo` class is the main entry point for interacting with the device. It handles the communication and provides methods for various operations.
+
+The `SimpleTest` class demonstrates:
+1.  Loading the Pixoo device IP address from `config.properties`.
+2.  Creating an instance of the `Pixoo` object.
+3.  Calling `sendAnimatedGif()` to send a local GIF file to the device.
+
+## Simulator
+
+If you don't have a physical Pixoo device, you can use the built-in simulator. To enable the simulator mode, you need to modify the `Pixoo` object instantiation in your code. For example, in `SimpleTest.java`:
 
 ```java
-import com.pixoo.objects.Pixoo;
-import com.pixoo.constants.Palette;
+// To use the simulator:
+// Pixoo pixoo = new Pixoo("127.0.0.1", 64, true, true, true, new SimulatorConfiguration());
 
-public class MyPixooApp {
-    public static void main(String[] args) {
-        // Create a Pixoo instance (replace with your device's IP)
-        Pixoo pixoo = new Pixoo("192.168.1.137");
-        
-        // Clear the screen
-        pixoo.clear(Palette.BLACK);
-        
-        // Draw some pixels
-        pixoo.drawPixel(10, 10, Palette.RED);
-        pixoo.drawLine(0, 0, 20, 20, Palette.WHITE);
-        
-        // Draw text
-        pixoo.drawText("Hello Java!", 5, 30, Palette.BLUE);
-        
-        // Push the buffer to display the changes
-        pixoo.push();
-    }
-}
+// To use a real device (as it is now):
+Pixoo pixoo = new Pixoo(ipAddress, 64, true, true, false, null);
 ```
-
-## API Documentation
-
-### Creating a Pixoo Instance
-
-```java
-// Basic constructor (auto-discover device)
-Pixoo pixoo = new Pixoo();
-
-// With IP address
-Pixoo pixoo = new Pixoo("192.168.1.137");
-
-// Full constructor with all options
-Pixoo pixoo = new Pixoo(
-    "192.168.1.137",  // IP address
-    64,               // Screen size (16, 32, or 64)
-    true,             // Debug mode
-    true,             // Auto-refresh connection
-    false,            // Simulation mode
-    new SimulatorConfiguration(4)  // Simulator config
-);
-```
-
-### Drawing Operations
-
-```java
-// Clear screen
-pixoo.clear(Palette.BLACK);
-pixoo.clearRgb(0, 0, 0);
-
-// Draw pixels
-pixoo.drawPixel(x, y, Palette.RED);
-pixoo.drawPixelAtLocationRgb(x, y, 255, 0, 0);
-
-// Draw lines
-pixoo.drawLine(startX, startY, endX, endY, Palette.WHITE);
-pixoo.drawLineFromStartToStopRgb(0, 0, 10, 10, 255, 255, 255);
-
-// Draw rectangles
-pixoo.drawFilledRectangle(x1, y1, x2, y2, Palette.BLUE);
-pixoo.drawFilledRectangleFromTopLeftToBottomRightRgb(0, 0, 10, 10, 0, 0, 255);
-
-// Draw text
-pixoo.drawText("Hello", x, y, Palette.GREEN);
-pixoo.drawTextAtLocationRgb("World", x, y, 0, 255, 0);
-
-// Draw characters
-pixoo.drawCharacter('A', x, y, Palette.YELLOW);
-pixoo.drawCharacterAtLocationRgb('B', x, y, 255, 255, 0);
-```
-
-### Image Operations
-
-```java
-// Draw image from file
-pixoo.drawImage("path/to/image.png", x, y, ImageResampleMode.PIXEL_ART);
-
-// Draw BufferedImage
-BufferedImage img = ImageIO.read(new File("image.png"));
-pixoo.drawImage(img, new MathUtils.Point(x, y), ImageResampleMode.SMOOTH, false);
-```
-
-### Device Control
-
-```java
-// Control display
-pixoo.setBrightness(50);           // Set brightness (0-100)
-pixoo.setScreen(true);             // Turn screen on/off
-pixoo.setScreenOn();               // Turn screen on
-pixoo.setScreenOff();              // Turn screen off
-
-// Channels and content
-pixoo.setChannel(Channel.FACES.getValue());  // Switch to faces channel
-pixoo.setClock(1);                 // Set clock face
-pixoo.setVisualizer(0);            // Set audio visualizer
-
-// Text scrolling
-pixoo.sendText(
-    "Scrolling Text!",             // Text
-    0, 32,                         // Position
-    Palette.WHITE,                 // Color
-    1,                             // Identifier (0-19)
-    2,                             // Font size
-    64,                            // Width
-    1,                             // Speed
-    TextScrollDirection.LEFT       // Direction
-);
-
-// Other controls
-pixoo.soundBuzzer(500, 500, 3000); // Play buzzer
-pixoo.setWhiteBalance(100, 100, 100); // Set white balance
-pixoo.reboot();                    // Reboot device
-```
-
-### Buffer Management
-
-**Important**: Always call `push()` after drawing operations to display your changes!
-
-```java
-// Draw something
-pixoo.drawPixel(10, 10, Palette.RED);
-pixoo.drawText("Hello", 0, 0, Palette.WHITE);
-
-// Push changes to display
-pixoo.push();
-```
-
-## Colors
-
-The library includes a built-in color palette:
-
-```java
-// Predefined colors
-Palette.BLACK
-Palette.WHITE
-Palette.RED
-Palette.GREEN
-Palette.BLUE
-Palette.YELLOW
-Palette.CYAN
-Palette.MAGENTA
-
-// Custom colors
-Palette.Color customColor = new Palette.Color(128, 64, 255);
-```
-
-## Font Support
-
-The library includes a PICO-8 style font that supports:
-
-- Numbers: `0123456789`
-- Lowercase: `abcdefghijklmnopqrstuvwxyz`
-- Uppercase: `ABCDEFGHIJKLMNOPQRSTUVWXYZ`
-- Special characters: `!'()+,-<=>?[]^_:;./{|}~$@%`
-
-```java
-// Check if character is supported
-boolean supported = Font.isCharacterSupported('A');
-
-// Get supported characters
-Set<Character> chars = Font.getSupportedCharacters();
-```
-
-## Animation Example
-
-```java
-public void animatePixel(Pixoo pixoo) {
-    for (int x = 0; x < 64; x++) {
-        pixoo.clear(Palette.BLACK);
-        pixoo.drawPixel(x, 32, Palette.RED);
-        pixoo.push();
-        
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            break;
-        }
-    }
-}
-```
-
-## Error Handling
-
-The library includes built-in error handling. Enable debug mode to see detailed error messages:
-
-```java
-Pixoo pixoo = new Pixoo("192.168.1.137", 64, true, true, false, null);
-```
-
-## Simulation Mode
-
-For testing without a physical device, enable simulation mode:
-
-```java
-Pixoo pixoo = new Pixoo(null, 64, true, true, true, new SimulatorConfiguration(4));
-```
-
-## Requirements
-
-- Java 11 or higher
-- Network connection to Pixoo device
-- Dependencies (automatically handled by Maven):
-  - OkHttp for HTTP communication
-  - Gson for JSON processing
-  - ImgScalr for image processing
-
-## Device Compatibility
-
-Tested with:
-- Pixoo 64
-- Should work with Pixoo 16 and Pixoo 32 (specify size in constructor)
-
-## License
-
-This project follows the same license as the original Python library:
-Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+When `simulated` is set to `true` and a `SimulatorConfiguration` is provided, a window will pop up simulating the Pixoo display.
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+Contributions are welcome! Please feel free to submit pull requests or open issues.
 
-## Troubleshooting
+## Original Repository
 
-### Connection Issues
-- Ensure your device is on the same network
-- Check the IP address is correct
-- Verify the device is powered on and connected to WiFi
+This project is based on the work done in the [pixoo Python library by SomethingWithComputers](https://github.com/SomethingWithComputers/pixoo). Many thanks to the original authors for their work.
 
-### Performance
-- Don't call `push()` more than once per second to avoid overwhelming the device
-- Use the auto-refresh feature to prevent connection timeouts
-- Consider using simulation mode for development and testing
+## License
 
-### Memory
-- Large images are automatically scaled down to fit the display
-- The library manages its own pixel buffer efficiently
-
-## Examples
-
-See the `com.pixoo.examples` package for complete working examples including:
-- Basic drawing operations
-- Text rendering
-- Animation
-- Device control
-
-For more examples and advanced usage, check the examples directory in the project repository.
+This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details (assuming you will add one, or specify otherwise).

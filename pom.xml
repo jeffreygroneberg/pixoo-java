@@ -5,8 +5,8 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.pixoo</groupId>
-    <artifactId>pixoo-java</artifactId>
+    <groupId>de.jeffreygroneberg</groupId>
+    <artifactId>pixooj</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
